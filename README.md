@@ -9,6 +9,7 @@ Sebelum Anda dapat menjalankan TikBot, Anda perlu menginstal hal-hal berikut di 
 
 - Python 3.6 atau versi yang lebih baru
 - pip (Penginstal paket Python)
+- Git (untuk mengkloning repositori)
 - Peramban Google Chrome atau Chromium
 - ChromeDriver (sesuai dengan versi peramban Anda)
 
