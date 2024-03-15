@@ -28,7 +28,7 @@ class Bot:
         print("\033c", end="")
 
     def initialize_driver(self): # Set up Chrome options for WebDriver, including user agent and logging level
-        print(Fore.YELLOW + "[~] Loading driver, please wait...")
+        print(Fore.YELLOW + "[~] Loading driver, Mohon Tunggu...")
         options = Options()
         options.add_argument("--log-level=3")
         options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36")
@@ -36,9 +36,9 @@ class Bot:
         try:
             self.driver = webdriver.Chrome(options=options)
             self.driver.get("https://www.google.com")  # Attempt to open a known page
-            print(Fore.GREEN + "[+] Driver loaded successfully\n")
+            print(Fore.GREEN + "[+] Driver Telah diload!\n")
         except Exception as e:
-            print(Fore.RED + "[!] No internet connection or WebDriver error")
+            print(Fore.RED + "[!] Tidak ada koneksi internet atau WebDriver error")
             exit(1)
 
     def setup_service_xpaths(self): # Define the base URL and xpaths for different services to interact with
@@ -57,7 +57,7 @@ class Bot:
             try:
                 element = self.driver.find_element(By.XPATH, xpath)
                 if element.is_enabled():
-                    self.services[service] = (xpath, div_index, Fore.GREEN + "[WORKING]")
+                    self.services[service] = (xpath, div_index, Fore.GREEN + "[BERFUNGSI]")
                 else:
                     self.services[service] = (xpath, div_index, Fore.RED + "[OFFLINE]")
             except NoSuchElementException:
@@ -66,12 +66,12 @@ class Bot:
         # Mark 'comment_hearts' service explicitly as not implemented
         if "comment_hearts" in self.services:
             xpath, div_index = self.services["comment_hearts"][:2]
-            self.services["comment_hearts"] = (xpath, div_index, Fore.YELLOW + "[NOT IMPLEMENTED]")
+            self.services["comment_hearts"] = (xpath, div_index, Fore.YELLOW + "[BELUM DIIMPLEMENTASIKAN]")
 
 
     def start(self): # Main method to start the bot, load the page, and handle user interactions
         self.driver.get(self.url)
-        print(Fore.YELLOW + "Please complete the captcha on the website and press Enter here when done...")
+        print(Fore.YELLOW + "Mohon selesaikan captcha pada website dan tekan Enter disini setelah selesai!") 
         input()
         self.check_services()
         self.choose_service_and_url()
@@ -80,7 +80,7 @@ class Bot:
                 for video_url in self.video_urls:
                     self.perform_service_action(video_url)
         except KeyboardInterrupt:
-            print(Fore.RED + "\n[!] Script terminated by user.")
+            print(Fore.RED + "\n[!] Script dihentikan oleh pengguna.")
         finally:
             self.driver.quit()
 
@@ -90,9 +90,9 @@ class Bot:
             _, div_index, status = details if len(details) == 3 else (*details, "[STATUS UNKNOWN]")
             print(Fore.BLUE + f"[{index}] {service.ljust(20)} {status}")
         
-        choice = int(input(Fore.YELLOW + "[-] Choose an option: "))
+        choice = int(input(Fore.YELLOW + "[-] Pilih sebuah opsi: "))
         self.service_name = list(self.services.keys())[choice - 1]
-        urls_input = input(Fore.MAGENTA + "[-] Enter video URLs separated by a space: ")
+        urls_input = input(Fore.MAGENTA + "[-] Masukkan URL Video Tiktok dipisahkan dengan spasi bila ada beberapa: ")
         self.video_urls = urls_input.split()
         
         _, self.div_index, _ = self.services[self.service_name]
@@ -100,12 +100,12 @@ class Bot:
 
 
     def perform_service_action(self, video_url): # Perform the action for the chosen service on the provided video URL
-        print(Fore.CYAN + f"[+] Switching URL link to \"{video_url}\"")
+        print(Fore.CYAN + f"[+] Mengganti URL ke \"{video_url}\"")
         actions = [
-            ("clear the URL input", f"/html/body/div[{self.div_index}]/div/form/div/input", "clear"),
-            ("enter the video URL", f"/html/body/div[{self.div_index}]/div/form/div/input", "send_keys"),
-            ("click the search button", f"/html/body/div[{self.div_index}]/div/form/div/div/button", "click"),
-            ("click the send button", f"/html/body/div[{self.div_index}]/div/div/div[1]/div/form/button", "click"),
+            ("Membersihkan input URL", f"/html/body/div[{self.div_index}]/div/form/div/input", "clear"),
+            ("Memasukkan URL video", f"/html/body/div[{self.div_index}]/div/form/div/input", "send_keys"),
+            ("Klik tombol pencarian", f"/html/body/div[{self.div_index}]/div/form/div/div/button", "click"),
+            ("Klik tombol kirim", f"/html/body/div[{self.div_index}]/div/div/div[1]/div/form/button", "click"),
         ]
 
         for action_desc, xpath, action_type in actions:
@@ -117,10 +117,10 @@ class Bot:
                     element.send_keys(video_url)
                 element.click()
                 print(Fore.GREEN + f"[+] Successfully {action_desc}.")
-                if action_desc == "click the search button":
+                if action_desc == "Klik tombol pencarian":
                     time.sleep(3)  # Delay after clicking the search button based on load times
             except TimeoutException:
-                print(Fore.RED + f"[!] Timeout: Could not {action_desc} within the specified period.")
+                print(Fore.RED + f"[!] Timeout: Tidak bisa {action_desc} dalam periode yang ditentukan.")
 
         # Custom wait time for each service after actions
         min_wait, max_wait = self.service_wait_times[self.service_name]
@@ -129,7 +129,7 @@ class Bot:
 
     def countdown_timer(self, duration): # Display a countdown timer for the specified duration
         for i in range(duration, 0, -1):
-            print(Fore.CYAN + f"\rWaiting for {i} seconds to proceed...", end="")
+            print(Fore.CYAN + f"\rMenunggu {i} detik untuk melanjutkan...", end="")
             time.sleep(1)
         print()
 
