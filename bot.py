@@ -116,7 +116,7 @@ class Bot:
                 elif action_type == "send_keys":
                     element.send_keys(video_url)
                 element.click()
-                print(Fore.GREEN + f"[+] Successfully {action_desc}.")
+                print(Fore.GREEN + f"[+] Sukses {action_desc}.")
                 if action_desc == "Klik tombol pencarian":
                     time.sleep(3)  # Delay after clicking the search button based on load times
             except TimeoutException:
